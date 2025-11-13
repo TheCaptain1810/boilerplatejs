@@ -9,6 +9,7 @@ import {
   backendLanguageChoices,
   nodejsFrameworkChoices,
 } from "./choices.js";
+import { error } from "console";
 
 const appKind = await select({
   message: "What king of application do you want to build?",
@@ -22,15 +23,53 @@ switch (appKind) {
       choices: frontendFrameworkChoices,
     });
     switch (framework) {
-      case "React":
-        const language = await select({
+      case "Vanilla":
+        const vanillaLanguage = await select({
           message: "Would you like to use TypeScript?",
           choices: [
             { name: "Yes", value: "Yes" },
             { name: "No", value: "No" },
           ],
         });
-        if (language === "Yes") {
+        if (vanillaLanguage === "Yes") {
+          exec(
+            "npm create vite@latest ./ -- --template vanilla-ts",
+            (error, stdout, stderr) => {
+              if (error) {
+                console.error(`Error: ${error.message}`);
+                return;
+              }
+              if (stderr) {
+                console.error(`Stderr: ${stderr}`);
+                return;
+              }
+            }
+          );
+        } else {
+          exec(
+            "npm create vite@latest ./ -- --template vanilla",
+            (error, stdout, stderr) => {
+              if (error) {
+                console.error(`Error: ${error.message}`);
+                return;
+              }
+              if (stderr) {
+                console.error(`Stderr: ${stderr}`);
+                return;
+              }
+            }
+          );
+        }
+        break;
+      case "React":
+        const reactLanguage = await select({
+          message: "Would you like to use TypeScript?",
+          choices: [
+            { name: "Yes", value: "Yes" },
+            { name: "No", value: "No" },
+          ],
+        });
+        if (reactLanguage === "Yes") {
           exec(
             "npm create vite@latest ./ -- --template react-ts",
             (error, stdout, stderr) => {
